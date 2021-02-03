@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    app:startDestination="@id/searchFragment">
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.cacagdas.itunessearchapp.ui.search.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/showMovie"
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/searchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.cacagdas.itunessearchapp.ui.detail.DetailFragment"
+        android:label="MovieFragment" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+        <argument
+            android:name="releaseDate"
+            app:argType="string" />
+    </fragment>
+</navigation>
