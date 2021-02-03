@@ -34,9 +34,7 @@ class DetailFragment : Fragment(), Injectable {
     lateinit var appExecutors: AppExecutors
 
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
-
     var binding by autoCleared<DetailFragmentBinding>()
-
     private val params by navArgs<DetailFragmentArgs>()
 
     override fun onCreateView(
@@ -54,9 +52,10 @@ class DetailFragment : Fragment(), Injectable {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        (activity as MainActivity).supportActionBar?.title = getString(R.string.app_name)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.item = ITunesItem(0, params.title, params.imageUrl, params.releaseDate)
-        (activity as MainActivity).supportActionBar?.title = params.title
+        (activity as MainActivity).supportActionBar?.title =
+                if (!params.title.isNullOrEmpty()) params.title
+                else getString(R.string.detail_fragment_name)
     }
 }

@@ -19,18 +19,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.cacagdas.itunessearchapp.AppExecutors
 import com.cacagdas.itunessearchapp.R
 import com.cacagdas.itunessearchapp.binding.FragmentDataBindingComponent
 import com.cacagdas.itunessearchapp.databinding.SearchFragmentBinding
 import com.cacagdas.itunessearchapp.di.Injectable
-import com.cacagdas.itunessearchapp.ui.common.MovieListAdapter
+import com.cacagdas.itunessearchapp.ui.common.ITunesItemListAdapter
 import com.cacagdas.itunessearchapp.ui.common.RetryCallback
 import com.cacagdas.itunessearchapp.util.autoCleared
-import com.google.android.material.snackbar.Snackbar
 import com.cacagdas.itunessearchapp.MainActivity
+import com.cacagdas.itunessearchapp.api.MediaType
 import javax.inject.Inject
 
 class SearchFragment : Fragment(), Injectable {
@@ -41,23 +39,24 @@ class SearchFragment : Fragment(), Injectable {
     @Inject
     lateinit var appExecutors: AppExecutors
 
+    private var mediaType: MediaType = MediaType.All
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
     var binding by autoCleared<SearchFragmentBinding>()
-    var adapter by autoCleared<MovieListAdapter>()
+    var adapter by autoCleared<ITunesItemListAdapter>()
     val searchViewModel: SearchViewModel by viewModels {
         viewModelFactory
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.search_fragment,
-            container,
-            false,
-            dataBindingComponent
+                inflater,
+                R.layout.search_fragment,
+                container,
+                false,
+                dataBindingComponent
         )
 
         return binding.root
@@ -67,9 +66,9 @@ class SearchFragment : Fragment(), Injectable {
         (activity as MainActivity).supportActionBar?.title = getString(R.string.app_name)
         binding.lifecycleOwner = viewLifecycleOwner
         initRecyclerView()
-        val rvAdapter = MovieListAdapter(
-            dataBindingComponent = dataBindingComponent,
-            appExecutors = appExecutors,
+        val rvAdapter = ITunesItemListAdapter(
+                dataBindingComponent = dataBindingComponent,
+                appExecutors = appExecutors,
         ) { item ->
             findNavController().navigate(
                     SearchFragmentDirections.showMovie(item.title, item.posterPath!!, item.releaseDate!!)
@@ -80,12 +79,30 @@ class SearchFragment : Fragment(), Injectable {
         adapter = rvAdapter
 
         initSearchInputListener()
+        initRadioGroupListener()
 
         binding.callback = object : RetryCallback {
             override fun retry() {
                 searchViewModel.refresh()
             }
         }
+    }
+
+    private fun initRadioGroupListener() {
+        binding.radioGroup.setOnCheckedChangeListener { _, i ->
+            setMediaType(i)
+        }
+    }
+    private fun setMediaType(i: Int) {
+        mediaType = when (i) {
+            MediaType.Movies.id -> MediaType.Movies
+            MediaType.Music.id -> MediaType.Music
+            MediaType.Apps.id -> MediaType.Apps
+            MediaType.Books.id -> MediaType.Books
+            else -> MediaType.All
+        }
+        if (binding.input.text.length > 2)
+            doSearch()
     }
 
     private fun initSearchInputListener() {
@@ -121,12 +138,12 @@ class SearchFragment : Fragment(), Injectable {
         val query = binding.input.text.toString()
         // Dismiss keyboard
         dismissKeyboard(v.windowToken)
-        searchViewModel.setQuery(query)
+        searchViewModel.setQuery(query, mediaType.queryString)
     }
 
     private fun doSearch() {
         val query = binding.input.text.toString()
-        searchViewModel.setQuery(query)
+        searchViewModel.setQuery(query, mediaType.queryString)
     }
 
     private fun initRecyclerView() {

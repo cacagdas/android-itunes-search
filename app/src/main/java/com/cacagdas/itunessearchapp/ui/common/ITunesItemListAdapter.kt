@@ -13,7 +13,7 @@ import com.cacagdas.itunessearchapp.vo.ITunesItem
 /**
  * A RecyclerView adapter for [ITunesItem] class.
  */
-class MovieListAdapter(
+class ITunesItemListAdapter(
     private val dataBindingComponent: DataBindingComponent,
     appExecutors: AppExecutors,
     private val movieClickCallback: ((ITunesItem) -> Unit)?

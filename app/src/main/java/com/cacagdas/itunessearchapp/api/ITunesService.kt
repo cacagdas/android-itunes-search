@@ -12,6 +12,6 @@ interface ITunesService {
     @GET("search")
     fun search(
             @Query("term") query: String,
-            //@Query("entity") entity: String,
+            @Query("media") mediaType: String,
     ): Call<ApiResponse>
 }

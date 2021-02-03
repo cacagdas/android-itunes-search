@@ -19,12 +19,15 @@
         android:label="MovieFragment" >
         <argument
             android:name="title"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"/>
         <argument
             android:name="imageUrl"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"/>
         <argument
             android:name="releaseDate"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true"/>
     </fragment>
 </navigation>
