@@ -1,9 +1,11 @@
 package com.cacagdas.itunessearchapp.ui.detail
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,6 +21,10 @@ import com.cacagdas.itunessearchapp.MainActivity
 import com.cacagdas.itunessearchapp.databinding.DetailFragmentBinding
 import com.cacagdas.itunessearchapp.di.Injectable
 import com.cacagdas.itunessearchapp.vo.ITunesItem
+import com.cacagdas.itunessearchapp.util.formatDate
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class DetailFragment : Fragment(), Injectable {
@@ -51,9 +57,12 @@ class DetailFragment : Fragment(), Injectable {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.item = ITunesItem(0, params.title, params.imageUrl, params.releaseDate)
+
+        val formattedDate = formatDate(params.releaseDate)
+        binding.item = ITunesItem(0, params.title, params.imageUrl, formattedDate)
         (activity as MainActivity).supportActionBar?.title =
                 if (!params.title.isNullOrEmpty()) params.title
                 else getString(R.string.detail_fragment_name)

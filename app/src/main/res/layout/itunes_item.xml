@@ -8,6 +8,9 @@
         <variable
             name="item"
             type="com.cacagdas.itunessearchapp.vo.ITunesItem" />
+        <variable
+            name="releaseDate"
+            type="String" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -42,18 +45,17 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
-                android:text="@{item.releaseDate.toString()}"
+                android:text="@{releaseDate}"
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/vote"
-                android:elevation="@dimen/default_margin"
-                tools:text="5"
+                android:id="@+id/date"
+                tools:text="dd MMMM yyyy"
                 android:background="@color/colorWhite"
                 android:padding="2dp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="@dimen/default_margin"
-                app:layout_constraintBottom_toBottomOf="@+id/posterImage"
+                app:layout_constraintTop_toBottomOf="@+id/name"
                 android:layout_marginTop="@dimen/default_margin"
                 android:layout_marginLeft="@dimen/default_margin" />
         </androidx.constraintlayout.widget.ConstraintLayout>
