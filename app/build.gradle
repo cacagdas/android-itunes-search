@@ -78,6 +78,8 @@ dependencies {
 
     implementation deps.timber
 
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
+
     kapt deps.dagger.android_support_compiler
     kapt deps.dagger.compiler
     kapt deps.room.compiler

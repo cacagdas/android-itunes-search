@@ -19,7 +19,7 @@ import com.cacagdas.itunessearchapp.util.formatDate
 class ITunesItemListAdapter(
         private val dataBindingComponent: DataBindingComponent,
         appExecutors: AppExecutors,
-        private val movieClickCallback: ((ITunesItem) -> Unit)?
+        private val itemClickCallback: ((ITunesItem) -> Unit)?
 ) : DataBoundListAdapter<ITunesItem, ItunesItemBinding>(
         appExecutors = appExecutors,
         diffCallback = object : DiffUtil.ItemCallback<ITunesItem>() {
@@ -43,7 +43,7 @@ class ITunesItemListAdapter(
         )
         binding.root.setOnClickListener {
             binding.item?.let {
-                movieClickCallback?.invoke(it)
+                itemClickCallback?.invoke(it)
             }
         }
 
